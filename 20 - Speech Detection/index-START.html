@@ -1,23 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Speech Detection</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
 
-  <div class="words" contenteditable>
-  </div>
+  <head>
+    <meta charset="UTF-8">
+    <title>Speech Detection</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
 
-<script>
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  <body>
 
+    <div class="words" contenteditable>
+    </div>
 
-</script>
+    <script>
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+    const recognition = new SpeechRecognition();
+    recognition.interimResults = true;
 
-  <style>
+    let p = document.createElement('p');
+    const words = document.querySelector('.words');
+
+    recognition.addEventListener('result', e => {
+      const transcript = Array.from(e.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+
+      p.textContent = transcript;
+      if(e.results[0].isFinal){
+        p=document.createElement('p');
+        words.appendChild(p);
+      }
+    });
+
+    recognition.addEventListener('end', recognition.start);
+    recognition.start();
+  </script>
+
+    <style>
     html {
       font-size: 10px;
     }
@@ -34,7 +55,7 @@
       margin: 50px auto;
       background: white;
       border-radius: 5px;
-      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
       padding: 1rem 2rem 1rem 5rem;
       background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
       background-size: 100% 3rem;
@@ -58,5 +79,6 @@
     }
   </style>
 
-</body>
+  </body>
+
 </html>
